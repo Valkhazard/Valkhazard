@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Adivinanzas</title>
+</head>
+<body>
+    <h1>Hola Mochi, perdon que me trasnoche, pero hice este juego para ti</h1>
+    
+    <div id="game-area">
+        <!-- Aquí se mostrará el resultado del juego -->
+        <p id="result"></p>
+
+        <!-- Formulario para ingresar el número -->
+        <form id="guess-form">
+            <label for="number">¿Cuál crees que es el número?</label>
+            <input type="number" id="number" name="number" min="1" max="100" required>
+            <button type="submit">Adivinar</button>
+        </form>
+
+        <!-- Botón para pedir una pista -->
+        <button id="hint-btn">¿Necesitas una pista?</button>
+    </div>
+
+    <!-- Script para manejar la interactividad del juego -->
+    <script>
+        // Función para enviar la solicitud al servidor y manejar la respuesta
+        function playGame() {
+            const form = document.getElementById('guess-form');
+            const resultText = document.getElementById('result');
+            const hintBtn = document.getElementById('hint-btn');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const number = document.getElementById('number').value;
+                
+                // Enviar la conjetura al servidor (puedes usar Fetch API o Axios)
+                fetch('/guess', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ number: number })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Manejar la respuesta del servidor
+                    resultText.textContent = data.message;
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
+            // Manejar la solicitud de pista
+            hintBtn.addEventListener('click', function() {
+                // Enviar solicitud al servidor para una pista (si es necesario)
+                fetch('/hint')
+                .then(response => response.json())
+                .then(data => {
+                    // Mostrar la pista al usuario
+                    resultText.textContent = data.hint;
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
+
+        // Ejecutar la función al cargar la página
+        window.onload = playGame;
+    </script>
+</body>
+</html>
