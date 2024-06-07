@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Adivinanzas</title>
+    <title>Juego de Adivinanzas para mochi de tu kakapo</title>
 </head>
 <body>
     <h1>Hola Mochi, perdon que me trasnoche, pero hice este juego para ti</h1>
@@ -37,7 +37,7 @@
                 const number = document.getElementById('number').value;
                 
                 // Enviar la conjetura al servidor (puedes usar Fetch API o Axios)
-                fetch('/guess', {
+                fetch('/guess', {  // Esta ruta es relativa al dominio actual
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -55,7 +55,9 @@
             // Manejar la solicitud de pista
             hintBtn.addEventListener('click', function() {
                 // Enviar solicitud al servidor para una pista (si es necesario)
-                fetch('/hint')
+                fetch('/hint', {  // Esta ruta es relativa al dominio actual
+                    method: 'GET'
+                })
                 .then(response => response.json())
                 .then(data => {
                     // Mostrar la pista al usuario
